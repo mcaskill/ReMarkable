@@ -220,7 +220,7 @@ function reMarkable (
 				'<a href="'
 					//add deafult protocol if no link description and protocol was omitted
 					.(!$m[1][0] && !$m[4][0]
-					? ($m[6][0] ? 'mailto:' : 'http://')
+					? (isset($m[6][0]) ? 'mailto:' : 'http://')
 					: ($m[4][0] == '//' ? 'http:' : '')).
 					//encode URLs (`&amp;`)
 					preg_replace ('/&(?!amp;)/i', '&amp;', $m[3][0])
@@ -228,7 +228,7 @@ function reMarkable (
 					//`rel` attribute
 					(($rel = (
 						//if e-mail address, no rel
-						$m[6][0] ? ''
+						isset($m[6][0]) ? ''
 						//construct possible rel values:
 						: trim (
 							($m[2][0] ? 'nofollow ' : '').			//no-follow URL
