@@ -238,7 +238,7 @@ function reMarkable (
 					//mime type, if linking directly to a common file
 					($link ? " type=\"$link\"" : '').
 					//title?
-					($m[8][0] ? ' title='.$m[8][0] : '').
+					(isset($m[8][0]) ? ' title='.$m[8][0] : '').
 				'>'.
 					//link text: either the description, or the friendly URL
 					($m[1][0] ? $m[1][0] : $m[5][0]).
