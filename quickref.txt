@@ -30,7 +30,7 @@ Inline Formatting:
 	{{dfn|definition}}				Definition
 	{{{PAL}|Phase Alternate Line}}			Can include abbr without title
 	
-	This statement is [true]			Insert
+	This statement is +++true+++			Insert
 	This statement is ---false---			Delete
 	
 	((legalese))					Side text

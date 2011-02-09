@@ -457,7 +457,7 @@ The basic syntax is similar to abbreviations but using double curly braces;
 {{ASCII|American Standard Code for Information Interchange}}
 <~~~
 
-Definitions also allow abbreviations (without title) inside the first portion [the term] because you should use ``abbr`` to markup initialisms that should be read as written rather than read letter-by-letter. (See <``abbr`` rule 3 (//camendesign.com/code/abbr_redux#abbr-3)> in my article about <abbreviations, definitions and citations (//camendesign.com/code/abbr_redux)>)
+Definitions also allow abbreviations (without title) inside the first portion +++[the term]+++ because you should use ``abbr`` to markup initialisms that should be read as written rather than read letter-by-letter. (See <``abbr`` rule 3 (//camendesign.com/code/abbr_redux#abbr-3)> in my article about <abbreviations, definitions and citations (//camendesign.com/code/abbr_redux)>)
 
 ~~~>
 {{{ASCII}|American Standard Code for Information Interchange}} =
@@ -486,7 +486,7 @@ For a guide on best practices using citations read my article on <abbreviations,
 Create ``<ins>`` elements with square brackets, like so:
 
 ~~~>
-He [Bill Gates] was actually very charming.
+He +++Bill Gates+++ was actually very charming.
 <~~~
 
 And ``<del>`` elements by wrapping the span of text with triple dashes.

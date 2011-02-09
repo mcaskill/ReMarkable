@@ -317,8 +317,8 @@ function reMarkable (
 		//e.g.	I’m _emphasising_ this point *strongly*.
 		'/(?:^|\b)_(?!\s)(.+?)(?!\s)_(?:\b|$)/',		'/\*(?!\s)(.+?)(?!\s)\*(?!\*)/',
 		/* --- <del> / <ins> ------------------------------------------------------------------------------------ */
-		//e.g.	---This statement is false--- [This statement is true].
-		'/---(?!-+)(.+?)(?<!-)---/',				'/\[(.+?)\]/',
+		//e.g.	---This statement is false--- +++This statement is true+++.
+		'/---(?!-+)(.+?)(?<!-)---/',				'/\+\+\+(?!\++)(.+?)\+\+\+/',
 		/* --- <cite> ------------------------------------------------------------------------------------------- */
 		//e.g.	I’ve finished reading ~The Lion, the Witch and the Wardrobe~.
 		'/~(?!\s)(.+?)(?<!\s)~/',
