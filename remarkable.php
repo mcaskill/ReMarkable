@@ -23,7 +23,8 @@ if (@$_SERVER['argv'][0] == basename (__FILE__)) exit (reMarkable (
 	@$_SERVER['argv'][1] ? $_SERVER['argv'][1] : 0,		//indent (optional)
 	@$_SERVER['argv'][2] ? $_SERVER['argv'][2] : 124,	//margin (optional)
 	@$_SERVER['argv'][3] ? $_SERVER['argv'][3] : '.',	//base path (optional)
-	@$_SERVER['argv'][4] ? $_SERVER['argv'][4] : 0		//options (optional)
+	@$_SERVER['argv'][4] ? $_SERVER['argv'][4] : 'screen',	//content type (optional)
+	@$_SERVER['argv'][5] ? $_SERVER['argv'][5] : 0		//options (optional)
 ));
 /* ---------------------------------------------------------------------------------------------------------------------- */
 function reMarkable (
@@ -31,6 +32,7 @@ function reMarkable (
 	$indent=0,	/* indent the resulting HTML by n tabs */
 	$margin=124,	/* word-wrap paragraphs at this character limit. use `false` for none */
 	$base_path='.',	/* relative or absolute path from this script to image files referenced in `$source_text` */
+	$query='screen',/* `screen, home, feed, print, whatever` and if string empty will match empty defined alternatives */
 	$options=0	/* see options section at top of page */
 ) {
 	/* the reason 124 is used as the wrap margin is because Firefox’s view->source window maxmized at 1024x768 is 124
@@ -434,6 +436,15 @@ function reMarkable (
 		/* --- «whitespace» ------------------------------------------------------------------------------------- */
 		//remove white space on empty lines - simplifies regexes dealing with multiple lines
 		'/^\s+\n/m',
+		/* --- Content Queries ---------------------------------------------------------------------------------- */
+		// Graceful content types like a feed alternative to an <iframe>.
+		//e.g.	@@ screen,handheld
+		//		<iframe src="http://foobar.com" />
+		//		Something more.
+		//
+		//	@@
+		//		<Some Link (//foobar.com)>
+		"/^(@@(?: (.*))?\n{0,2}((?:\t+.*\n)+|(?:\t+.*(?:\n|(?:\n)\n)?)+)?\n(?=\n))/me",
 		/* --- <blockquote> ------------------------------------------------------------------------------------- */
 		//e.g.	|	blockquote text
 		'/^(?:\|\ (.*)\n)?((?:\|(?:\t.*)?\n)+)(?:\|\ (.*)\n)?\n/me',
@@ -457,6 +468,10 @@ function reMarkable (
 		'/^(\xA1A%*!)(\xA1IMG%*!)(\xA1A%!)$/mu'
 	), array (
 		/*«whitespace»*/"\n",
+		/*ContentQuery*/'array_intersect ('.
+				'explode (",",str_replace(" ","",stripslashes ("$2"))),'.
+				'explode (",",str_replace(" ","","$query")))'.
+				'? (preg_replace("/^\\t/m","",stripslashes("$3")))."\n" : ""',
 		/*<blockquote>*/'"\n<blockquote>\n".(strlen("$1")?"<cite>".stripslashes("$1")."</cite>\n":"")'.
 				'."\n".preg_replace("/^\|\\t?/m","",stripslashes("$2\n"))'.
 				'.(strlen("$3")?"<cite>".stripslashes("$3")."</cite>\n":"")."</blockquote>\n\n"',

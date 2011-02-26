@@ -1,4 +1,4 @@
-# ReMarkable! Beta v0.4.3 #
+# ReMarkable! Beta v0.4.4 Alpha #
 
 <div id="toc">
 	<h2>Contents</h2>
@@ -43,10 +43,10 @@ I’m <em>emphasising</em> this point <strong>strongly</strong>.
 
 Optional Parameters:
 ----------------------------------------------------------------------------------------------------------------------------
-ReMarkable accepts 4 optional parameters in the format of:
+ReMarkable accepts 5 optional parameters in the format of:
 
 ~~~>
-ReMarkable source_text [indent] [wrap] [base_path] [options]
+ReMarkable source_text [indent] [wrap] [base_path] [query] [options]
 <~~~
 
 
@@ -132,7 +132,13 @@ reMarkable ("content", 0, 124, "../");
 <~~~
 
 
-#### 4. Options: ####
+#### 4. Content Query: ####
+
+The fifth optional parameter specifies what <content queries (#queries)> to display and which to hide.
+The ``query`` parameter, which defaults to ‘screen‘, is a comma separated list of what to display.
+
+
+#### 5. Options: ####
 
 This feature is experimental and likely to change in the future.
 
@@ -191,7 +197,7 @@ The result is written to `stdout`.
 The same example using parameters:
 
 ~~~>
-php path/to/remarkable.php 1 124 ../ 1 < path/to/file.rem
+php path/to/remarkable.php 1 124 ../ 'feed,print' 1 < path/to/file.rem
 <~~~
 
 Note: do not use the option names (“``REMARKABLE_NOXHTML``”) in the options parameter, instead provide the numerical sum.
@@ -1014,21 +1020,59 @@ However, when a preformatted block is in a block quote you must not put the bloc
 Recursion is supported, so you can place a preformatted block inside a second-level list item {&c|et cetera}.
 
 
-11.	Auto-Correction (#auto)
+11.	Content Queries (#queries)
+============================================================================================================================
+
+Sometimes you want to embed content like ``<iframe>`` or ``<embed>``
+to add sub-pages or Flash objects to your articles. This content can be useless if you print your article or maybe
+you don't want that content displayed under certain circumstances like your syndication feed.
+
+Inspired by {CSS} <Media Queries (//www.w3.org/TR/css3-mediaqueries/)>, articles can have a primitive form of awareness through _content types_.
+If you've used media queries for style sheets, you're already familiar with the concept. The only recognized
+content type is “screen”, the default string of the ``query`` parameter.
+
+Start a content query by using two at symbols, a space, and then your targeted “content type(s)” (separated by commas).
+The content follows on the next line, always indented one tab character.
+
+~~~>
+@@ screen, mobile
+	<iframe title="Foobar Video Player" class="foobar-player centered" type="text/html" width="600" height="368" src="http://foobar.com/embed/XXXXXX" frameborder="0" allowFullScreen></iframe>
+
+@@ feed
+	Check out the article to see the embedded video.
+
+@@
+	This is alternative content if not “screen” or “feed”. Content is always indented one tab and can span multiple paragraphs by
+	maintaining indenting, like below.
+	
+	Blockquotes, and all other kinds of lists, can be included in a definition
+	
+	|	This is a blockquote
+	
+	1.	And a list
+	2.	Like this
+<~~~
+
+Depending on the type(s) passed through ``reMarkable``, certain content will be displayed and others
+not. The names chosen for content types can reflect anything. For example, you could use an “excerpt” type that's used on
+a home page to display an abbreviated portion. Passing an empty string will display only typeless queries.
+
+
+12.	Auto-Correction (#auto)
 ============================================================================================================================
 Writing various typographical marks such as em and en-dashes is easier on some operating systems than others. When writing ReMarkable content on different operating systems ReMarkable provides a number of {ASCII} conventions that are automatically corrected to better unicode or HTML equivalents.
 
-11.1	Primes (#auto-prime)
+12.1	Primes (#auto-prime)
 ----------------------------------------------------------------------------------------------------------------------------
 Primes are used as shorthand for measurements in inches and feet. Inches are shortened to a double-prime, {e.g.|for example,} “A 15" monitor” and feet are shortened to a single-prime “He was 5'5" high”.
 
 These are different unicode characters than quotes or curly quotes and are created whenever next to a number; therefore beware that you may get them unintentionally if quoted text ends in a number. For example: `"Not before 5"` may be incorrectly interpreted as a use of a prime (5 inches). Instead try to work around this with your writing, either adding punctuation or altering the grammar: `"Not before 5 pm"` or `"Not before 5."`.
 
-11.2	“Smart” Quotes (#auto-quotes)
+12.2	“Smart” Quotes (#auto-quotes)
 ----------------------------------------------------------------------------------------------------------------------------
 ReMarkable automatically converts straight quotes ‘`" / '`’ into curly quotes “`“ ” / ‘ ’`”. Apostrophes for contractions are also converted into curly versions, for example: “can’t won’t shouldn’t wouldn’t”, as well as contractions omitting starting letters such as “’till” and “’twas” as well as date abbreviations: “The ’90s”.
 
-11.3	Em and En Dashes (#auto-emen)
+12.3	Em and En Dashes (#auto-emen)
 ----------------------------------------------------------------------------------------------------------------------------
 An <em-dash (//en.wikipedia.org/wiki/Dash#Em_dash)> is represented by two normal dashes: “`--`”, ReMarkable will correct all such instances to a real em-dash: “—”.
 
@@ -1038,11 +1082,11 @@ In {ASCII} write “` -to- `” (spaces either side) and it will be converted in
 The spaces are eaten, so that “`1980 -to- 1985`” becomes “1980–1985”. _
 To retain the spaces between the en-dash, double-space.
 
-11.4	Copyright, “All Rights Reserved” and Trade Mark (#auto-circlec)
+12.4	Copyright, “All Rights Reserved” and Trade Mark (#auto-circlec)
 ----------------------------------------------------------------------------------------------------------------------------
 Easy Copyright “©” and All Rights Reserved “®” symbols can be added using “`(C)`” (or “`(c)`”) and “`(R)`” respectively. The superscript Trade Mark symbol “™” is written “`^TM`” (or “`^tm`”); for example: `“Camen Design^TM`” yields “Camen Design™”.
 
-11.5	Ordinals and Superscript (#auto-ordinals)
+12.5	Ordinals and Superscript (#auto-ordinals)
 ----------------------------------------------------------------------------------------------------------------------------
 “`1st 2nd 3rd 4th`” {&c.|et cetera} are automatically superscripted—“1<sup>st</sup> 2<sup>nd</sup> 3<sup>rd</sup> 4<sup>th</sup>”.
 
@@ -1064,7 +1108,7 @@ Another example is displaying numerical powers, the example:
 
 Is converted to: “2<sup>10</sup> = 1024”
 
-11.6	Other Mathematical Symbols (#auto-mathematical)
+12.6	Other Mathematical Symbols (#auto-mathematical)
 ----------------------------------------------------------------------------------------------------------------------------
 Half, quarter and three-quarter fraction symbols “ 1/2”, “ 1/4” & “ 3/4” are created by writing “` 1/2`”, “` 1/4`” and “` 3/4`” respectively. _
 The required preceding space before the mark is eaten; {i.e.|that is,} “`3 1/2" Floppy Diskette`” becomes “3 1/2" Floppy Diskette”.
@@ -1082,7 +1126,7 @@ The real multiplication symbol “×” will be used where there a normal lowerc
 3x as much	=> 3× as much
 <~~~
 
-11.7	Other Typography (#auto-typography)
+12.7	Other Typography (#auto-typography)
 ----------------------------------------------------------------------------------------------------------------------------
 Ellipses “`...`” are corrected to unicode “…”.
 
