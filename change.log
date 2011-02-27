@@ -1,5 +1,9 @@
 v0.4.4a (25.FEB.11)
 NEW:	Added Content Queries--works similarly to Media Queries
+FIX:	Applied some changes made by Zengnat: <https://github.com/Zegnat/ReMarkable>
+	* Stop throwing a Notice when no title is specified for a link
+	* Fixes two more Notices that apply to e-mail links
+	* Add support for the HTML5 hgroup element (this is paragraph processing, not syntax support)
 
 v0.4.3 (5.OCT.10)
 NEW:	Large update to documentation, including how to mix HTML and ReMarkable syntax

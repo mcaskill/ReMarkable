@@ -1,6 +1,6 @@
 <?php //written by kroc camen of camen design
 /* ====================================================================================================================== */
-/* ReMarkable! [βeta] v0.4.3, requires latest PHP 5.2.x and multibyte support
+/* ReMarkable! [βeta] v0.4.4a, requires latest PHP 5.2.x and multibyte support
 
    ideas based on Markdown <daringfireball.net/projects/markdown/> and PHPMarkdown <michelf.com/projects/php-markdown/>.
    file type you should use for ReMarkable files is '.rem' or '.remark'
@@ -202,11 +202,11 @@ function reMarkable (
 			//swap in the HTML
 			$source_text = substr_replace ($source_text,
 				//if a thumbmail, include the link
-				($m[4][0] ? '<a href="'.$m[4][0].'"'.($link ? " type=\"$link\"" : '').'>' : '').
+				(@$m[4][0] ? '<a href="'.$m[4][0].'"'.($link ? " type=\"$link\"" : '').'>' : '').
 				//construct the image tag
-				'<img src="'.$m[3][0].'" alt='.$m[1][0].($m[5][0] ? ' title='.$m[5][0] : '')
+				'<img src="'.$m[3][0].'" alt='.$m[1][0].(@$m[5][0] ? ' title='.$m[5][0] : '')
 				.(isset ($info[0]) ? ' width="'.$info[0].'" height="'.$info[1].'"' : '')."$x>"
-				.($m[4][0] ? '</a>' : ''),
+				.(@$m[4][0] ? '</a>' : ''),
 			//replacement start and length
 			$m[0][1], strlen ($m[0][0]));
 			//go back and find the next image and don’t swap for a placeholder yet (as described above)
@@ -222,7 +222,7 @@ function reMarkable (
 				'<a href="'
 					//add deafult protocol if no link description and protocol was omitted
 					.(!$m[1][0] && !$m[4][0]
-					? (isset($m[6][0]) ? 'mailto:' : 'http://')
+					? (@$m[6][0] ? 'mailto:' : 'http://')
 					: ($m[4][0] == '//' ? 'http:' : '')).
 					//encode URLs (`&amp;`)
 					preg_replace ('/&(?!amp;)/i', '&amp;', $m[3][0])
@@ -230,7 +230,7 @@ function reMarkable (
 					//`rel` attribute
 					(($rel = (
 						//if e-mail address, no rel
-						isset($m[6][0]) ? ''
+						@$m[6][0] ? ''
 						//construct possible rel values:
 						: trim (
 							($m[2][0] ? 'nofollow ' : '').			//no-follow URL
@@ -240,7 +240,7 @@ function reMarkable (
 					//mime type, if linking directly to a common file
 					($link ? " type=\"$link\"" : '').
 					//title?
-					(isset($m[8][0]) ? ' title='.$m[8][0] : '').
+					(@$m[8][0] ? ' title='.$m[8][0] : '').
 				'>'.
 					//link text: either the description, or the friendly URL
 					($m[1][0] ? $m[1][0] : $m[5][0]).
@@ -444,7 +444,7 @@ function reMarkable (
 		//
 		//	@@
 		//		<Some Link (//foobar.com)>
-		"/^(@@(?: (.*))?\n{0,2}((?:\t+.*\n)+|(?:\t+.*(?:\n|(?:\n)\n)?)+)?\n(?=\n))/me",
+		"/^(@@(?: (?:for\b)?(.*?)(?:\bonly)?)?\n{0,2}((?:\t+.*\n)+|(?:\t+.*(?:\n|(?:\n)\n)?)+)?\n(?=\n))/me",
 		/* --- <blockquote> ------------------------------------------------------------------------------------- */
 		//e.g.	|	blockquote text
 		'/^(?:\|\ (.*)\n)?((?:\|(?:\t.*)?\n)+)(?:\|\ (.*)\n)?\n/me',
@@ -521,8 +521,8 @@ function reMarkable (
 				(a|img)
 			|	# elements that start a line that should not be wrapped
 				(?:article|aside|audio|blockquote|canvas|caption|col|colgroup|dialog|div|d[ltd]|embed
-				  |fieldset|figure|figcaption|footer|form|h[1-6r]|header|hgroup|input|label|legend|li|nav|noscript
-				  |object|[ou]l|optgroup|option|p|param|pre|script|section|select|source|table
+				  |fieldset|figure|figcaption|footer|form|h[1-6r]|header|hgroup|input|label|legend|li|nav
+				  |noscript|object|[ou]l|optgroup|option|p|param|pre|script|section|select|source|table
 				  |t(?:body|foot|head)|t[dhr]|textarea|video
 				# don’t wrap HTML comments or TOC markers
 				  |\#

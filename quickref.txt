@@ -125,7 +125,7 @@ Content Queries:
 	@@ screen
 		<iframe title="YouTube Video Player" class="youtube-player centered" type="text/html" width="600" height="368" src="http://youtube.com/embed/XXXXXX" frameborder="0" allowFullScreen></iframe>
 
-	@@ feed
+	@@ for feed only
 		Check out the article to see the embedded video.
 
 	@@

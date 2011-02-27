@@ -1032,10 +1032,11 @@ If you've used media queries for style sheets, you're already familiar with the 
 content type is “screen”, the default string of the ``query`` parameter.
 
 Start a content query by using two at symbols, a space, and then your targeted “content type(s)” (separated by commas).
-The content follows on the next line, always indented one tab character.
+Optionally, you can wrap your types with “for [type] only” for a slightly more plain-text readable syntax.
+	The content follows on the next line, always indented one tab character.
 
 ~~~>
-@@ screen, mobile
+@@ for screen, mobile only
 	<iframe title="Foobar Video Player" class="foobar-player centered" type="text/html" width="600" height="368" src="http://foobar.com/embed/XXXXXX" frameborder="0" allowFullScreen></iframe>
 
 @@ feed
